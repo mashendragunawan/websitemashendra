@@ -1,6 +1,5 @@
 # 🌐 Mas Hendra Gunawan - Personal Website
 
-![Website Preview](https://mashendragunawan.com/)
 
 Website pribadi dan portofolio Mas Hendra Gunawan, menampilkan karya proyek, keterampilan, dan informasi kontak.
 
