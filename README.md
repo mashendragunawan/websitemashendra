@@ -11,7 +11,7 @@ Website pribadi dan portofolio Mas Hendra Gunawan, menampilkan karya proyek, ket
 
 ## 🛠 Stack Teknologi
 - **Frontend**: HTML5, CSS3, JavaScript ES6
-- **Framework**: [Bootstrap 5](https://getbootstrap.com/)
+- **Home**: [Website](https://mashendragunawan.com/)
 - **Hosting**: GitHub Pages
 - **Tools**: Figma (Desain), Git (Version Control)
 
