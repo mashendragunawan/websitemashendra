@@ -19,4 +19,4 @@ Website pribadi dan portofolio Mas Hendra Gunawan, menampilkan karya proyek, ket
 ## 🔧 Instalasi Lokal
 1. Clone repository:
    ```bash
-   git clone https://github.com/mashendragunawan/mashendragunawan.github.io.git
+   git clone https://github.com/mashendragunawan/websitemashendra.git
