@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencarian Barang dengan Scrollbar Kustom</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f7fa;
+        }
+        
+        .search-container {
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        #search {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        
+        #search:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        #results {
+            margin-top: 5px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            
+            /* Styling scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: #3498db #f1f1f1;
+        }
+        
+        /* Scrollbar untuk WebKit (Chrome, Safari) */
+        #results::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #results::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        #results::-webkit-scrollbar-thumb {
+            background-color: #3498db;
+            border-radius: 10px;
+            border: 2px solid #f1f1f1;
+        }
+        
+        #results::-webkit-scrollbar-thumb:hover {
+            background-color: #2980b9;
+        }
+        
+        .item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .item:hover, .item.highlighted {
+            background-color: #e6f7ff;
+        }
+        
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Cari nama barang...">
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Data barang
+        const items = {
+            'A': ["Apel", "Aqua Gelas", "Antena TV", "Alat Tulis", "Air Mineral", "Asbak", "Aki Motor"],
+            'B': ["Buku", "Bola Basket", "Baterai AA", "Botol Minum", "Bantal", "Blender", "Bros"],
+            'C': ["Coklat", "Cermin", "Celana Jeans", "Cangkir", "Charger HP", "Cutter", "Cat Air"],
+            'D': ["Dompet", "Dasi", "Deterjen", "Dus", "Dispenser", "Drone", "Dudukan Laptop"],
+            'E': ["Es Krim", "Earphone", "Ember", "Energen", "Ekspedisi Box", "Etalase", "Elastik Rambut"],
+            'F': ["Flashdisk", "Fanta", "Frying Pan", "Face Wash", "Filter Air", "Fidget Spinner", "Flying Drone"],
+            'G': ["Gula", "Gunting", "Gelang", "Gantungan Baju", "Gimbal", "Gergaji", "Galon Air"],
+            'H': ["Handuk", "Hanger", "Helm", "Handphone", "Hiasan Dinding", "Hoodie", "Hardisk Eksternal"],
+            'I': ["Ice Cube", "Ikan Kaleng", "Indomie", "Insektisida", "Ikat Pinggang", "Infused Water", "Iron Box"],
+            'J': ["Jam Tangan", "Jas Hujan", "Jeruk", "Jepitan Rambut", "Jigsaw Puzzle", "Jaring Laba-laba", "Jus Buah"],
+            'K': ["Kopi", "Kacamata", "Kipas Angin", "Kursi", "Kulkas", "Kabel Data", "Kotak Makan"],
+            'L': ["Lampu", "Laptop", "Lemari", "Lipstik", "Lego", "Lilin Aroma", "Layar Proyektor"],
+            'M': ["Mouse", "Monitor", "Mie Instan", "Masker", "Mangkuk", "Mikrofon", "Mobil Remote"],
+            'N': ["Notebook", "Nasi Kotak", "Nutella", "Nivea Lotion", "Nampan", "Neraca Digital", "Net TV"],
+            'O': ["Oreo", "Obeng", "Oli Motor", "Organizer", "Oven Listrik", "Obat Nyamuk", "Origami Kertas"],
+            'P': ["Pensil", "Pisau", "Piring", "Pocari Sweat", "Parfum", "Papan Catur", "Pemanggang Roti"],
+            'Q': ["Queen Mattress", "Quaker Oats", "Quilt Cover", "Q-tips", "Quadcopter", "Quartz Watch", "Quick Charger"],
+            'R': ["Remote TV", "Rinso", "Rak Buku", "Roti Tawar", "Rice Cooker", "Rubik Cube", "Ransel"],
+            'S': ["Sendok", "Sapu", "Sandal", "Sikat Gigi", "Spidol", "Stapler", "Sprei"],
+            'T': ["Tisu", "Teh Botol", "Tas", "Termos", "Tatakan Gelas", "Tali Tambang", "Timbangan Digital"],
+            'U': ["Umbrella", "USB Cable", "UHT Milk", "Ultrasonic Cleaner", "Ukulele", "UV Lamp", "Underwear"],
+            'V': ["Vitamin C", "Vas Bunga", "Vape Liquid", "Velcro Tape", "Vacuum Cleaner", "VR Headset", "Ventilator"],
+            'W': ["Wipol", "Wajan", "Water Bottle", "Wall Clock", "Wireless Mouse", "Waffle Maker", "Water Heater"],
+            'X': ["Xiaomi Phone", "Xbox Controller", "Xylophone", "X-Acto Knife", "Xiaomi Band", "X-Dock", "XLR Cable"],
+            'Y': ["Yakult", "Yoghurt", "Yonex Racket", "Yorkshire Tea", "Yoyo", "Yamaha Guitar", "Y-Shirt"],
+            'Z': ["Zebra Pen", "Ziploc Bag", "Zinc Supplement", "Zippo Lighter", "Zen Garden", "Zumba DVD", "Zero Chair"]
+        };
+
+        const searchInput = document.getElementById('search');
+        const resultsDiv = document.getElementById('results');
+        let currentHighlight = -1;
+        let currentItems = [];
+
+        searchInput.addEventListener('input', function() {
+            const input = this.value.trim().toUpperCase();
+            currentHighlight = -1;
+            
+            if (input.length === 0) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+            
+            const firstLetter = input[0];
+            resultsDiv.innerHTML = '';
+            
+            if (items[firstLetter]) {
+                currentItems = items[firstLetter].filter(item => 
+                    item.toUpperCase().includes(input)
+                );
+                
+                if (currentItems.length > 0) {
+                    currentItems.forEach((item, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'item';
+                        div.textContent = item;
+                        div.addEventListener('click', () => selectItem(index));
+                        resultsDiv.appendChild(div);
+                    });
+                } else {
+                    showNoResults(input);
+                }
+            } else {
+                showNoResults(input);
+            }
+            
+            resultsDiv.style.display = 'block';
+        });
+
+        function showNoResults(searchTerm) {
+            currentItems = [];
+            resultsDiv.innerHTML = `
+                <div class="no-results">
+                    "Barang <strong>${searchTerm}</strong> tidak ditemukan"
+                </div>
+            `;
+        }
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (currentItems.length === 0) return;
+            
+            const items = document.querySelectorAll('.item');
+            
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    if (currentHighlight < items.length - 1) {
+                        currentHighlight++;
+                        updateHighlight(items);
+                    }
+                    break;
+                    
+                case 'ArrowUp':
+                    e.preventDefault();
+                    if (currentHighlight > 0) {
+                        currentHighlight--;
+                        updateHighlight(items);
+                    }
+                    break;
+                    
+                case 'Enter':
+                    e.preventDefault();
+                    if (currentHighlight >= 0) {
+                        selectItem(currentHighlight);
+                    }
+                    break;
+                    
+                case 'Escape':
+                    resultsDiv.style.display = 'none';
+                    break;
+            }
+        });
+
+        function updateHighlight(items) {
+            items.forEach((item, index) => {
+                item.classList.toggle('highlighted', index === currentHighlight);
+                if (index === currentHighlight) {
+                    item.scrollIntoView({ block: 'nearest' });
+                }
+            });
+        }
+
+        function selectItem(index) {
+            searchInput.value = currentItems[index];
+            resultsDiv.style.display = 'none';
+            currentHighlight = -1;
+            searchInput.focus();
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== searchInput) {
+                resultsDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
