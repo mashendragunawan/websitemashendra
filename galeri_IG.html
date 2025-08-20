@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Gallery - No Gap with Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #fafafa;
+            color: #262626;
+        }
+        
+        .container {
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 30px 20px 0;
+        }
+        
+        /* PROFILE HEADER STYLES */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #dbdbdb;
+            margin-bottom: 30px;
+        }
+        
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 30px;
+            object-fit: cover;
+            border: 1px solid #dbdbdb;
+        }
+        
+        .profile-info h1 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stat {
+            margin-right: 40px;
+        }
+        
+        .profile-stat span:first-child {
+            font-weight: bold;
+        }
+        
+        .profile-bio h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* GALLERY STYLES - NO GAP */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0; /* No gap between items */
+        }
+        
+        .gallery-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            background: #efefef;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-stats {
+            display: flex;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .gallery-stat {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        
+        .gallery-stat svg {
+            margin-right: 5px;
+        }
+        
+        /* RESPONSIVE ADJUSTMENTS */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .profile-info h1 {
+                font-size: 22px;
+            }
+            
+            .profile-stat {
+                margin-right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-pic {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PROFILE HEADER SECTION -->
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile Picture" class="profile-pic">
+            <div class="profile-info">
+                <h1>username</h1>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span>120</span> <span>posts</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span>1,234</span> <span>followers</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span>567</span> <span>following</span>
+                    </div>
+                </div>
+                <div class="profile-bio">
+                    <h2>User Name</h2>
+                    <p>This is my bio. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GALLERY SECTION - NO GAP -->
+        <div class="gallery" id="gallery">
+            <!-- Gallery items will be added here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Sample image data
+        const images = [
+            { id: 1, url: 'https://source.unsplash.com/random/600x600/?nature', likes: 123, comments: 45 },
+            { id: 2, url: 'https://source.unsplash.com/random/600x600/?city', likes: 89, comments: 12 },
+            { id: 3, url: 'https://source.unsplash.com/random/600x600/?people', likes: 456, comments: 78 },
+            { id: 4, url: 'https://source.unsplash.com/random/600x600/?food', likes: 234, comments: 56 },
+            { id: 5, url: 'https://source.unsplash.com/random/600x600/?travel', likes: 567, comments: 89 },
+            { id: 6, url: 'https://source.unsplash.com/random/600x600/?animal', likes: 345, comments: 67 },
+            { id: 7, url: 'https://source.unsplash.com/random/600x600/?art', likes: 178, comments: 23 },
+            { id: 8, url: 'https://source.unsplash.com/random/600x600/?architecture', likes: 299, comments: 34 },
+            { id: 9, url: 'https://source.unsplash.com/random/600x600/?fashion', likes: 412, comments: 56 },
+        ];
+
+        const gallery = document.getElementById('gallery');
+
+        images.forEach(image => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            
+            galleryItem.innerHTML = `
+                <img src="${image.url}" alt="Gallery image ${image.id}">
+                <div class="gallery-item-overlay">
+                    <div class="gallery-stats">
+                        <div class="gallery-stat">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            ${image.likes}
+                        </div>
+                        <div class="gallery-stat">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            ${image.comments}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            gallery.appendChild(galleryItem);
+        });
+    </script>
+</body>
+</html>
