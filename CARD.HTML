@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Responsife</title>
+</head>
+<body>
+    <div class="card-container">
+        <h1>Kartu Profile Kren</h1>
+        <div class="card">
+            <div class="particles" id="particles1"></div>
+            <div class="img-box">
+                <img src="hendra.jpg" alt="">
+                <div class="tag">Webdeveloper</div>
+                <div class="content">
+                    <h3 class="title">Sarah Johnson</h3>
+                    <p class="description">Seorang Pengembang web dengan passion menciptakan pengalaman digital yang menarik dan fungsional</p>
+                    <div class="card-footer">
+                        <a href="#">Read More</a>
+                        <div class="social-icon">
+                            <a href="#"><1 class="fa fa-facebook-f"></i></a>
+                                <a href="#"><1 class="twetter"></i></a>
+                                <a href="#"><1 class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        padding: 20px;
+    }
+    .card-container{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        max-width: 1300px;
+    }
+    .card{
+        position: relative;
+        width: 350px;
+        height: 500px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        transition: test 0.5s, box-shadow 0.5s;
+    }
+    .card:hover{
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    }
+</style>
+</html>
